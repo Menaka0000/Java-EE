@@ -1,0 +1,205 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: rgba(0, 0, 0, .01) !important;
+    z-index: -10;
+}
+
+/*spaces*/
+.space-50 {
+    height: 50px;
+}
+
+/*------*/
+.top-sec {
+    position: fixed;
+    width: 100%;
+    background-color: rgba(42, 42, 42, .5);
+    backdrop-filter: blur(20px);
+    z-index: 1;
+}
+
+.btnRefactor {
+    width: 100%;
+    font-size: 1rem;
+    letter-spacing: 2px;
+}
+
+/*-----Console*/
+#console {
+    width: 50px;
+    min-height: 30vh;
+    position: fixed;
+    /*left: 0;*/
+    background-color: rgba(42, 42, 42, .5);
+    border-radius: 0 10px 10px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    top: 50%;
+    transform: translatey(-50%);
+}
+
+.fas, .fab {
+    font-size: 1.5rem;
+    color: rgba(0, 0, 0, .7);
+    border: 1px solid rgba(0, 0, 0, .7);
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+    transition: background-color ease .5s;
+    position: relative;
+}
+
+.fas:hover, .fab:hover {
+    background-color: rgba(255, 255, 255, .5);
+}
+
+#console-header {
+    width: 50px;
+    min-height: 30vh;
+    position: fixed;
+    background-color: rgba(42, 42, 42, .5);
+    border-radius: 10px 0 0 10px;
+    top: 50%;
+    transform: translatey(-50%);
+    right: 0;
+}
+
+#console-header > label {
+    transform: rotate(90deg);
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: -20px;
+    font-family: 'Titillium Web', sans-serif;
+    letter-spacing: 1px;
+    font-size: 1.5rem;
+    font-weight: bolder;
+    color: rgba(0, 0, 0, 1);
+    width: fit-content;
+    height: fit-content;
+}
+
+#console i div {
+    opacity: 0;
+    left: 50px;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    font-size: 1rem;
+    height: fit-content;
+    width: 100px;
+    transition: opacity .2s, left .2s;
+
+}
+
+#customer-i:hover #customer-l {
+    opacity: 1;
+    left: 55px;
+}
+
+#product-i:hover #product-l {
+    opacity: 1;
+    left: 55px;
+}
+
+#cart-i:hover #cart-l {
+    opacity: 1;
+    left: 55px;
+}
+
+#order-i:hover #order-l {
+    opacity: 1;
+    left: 55px;
+}
+
+
+/*-----main sections*/
+
+.main-container {
+    position: relative;
+    width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.header-container {
+    position: relative;
+    width: 90%;
+    height: 50px;
+    margin-bottom: 20px;
+    background-color: rgba(42, 42, 42, .3);
+    border-radius: 10px 10px 0 0;
+    font-weight: bold;
+    font-size: 1.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: space-around;
+    font-family: 'Titillium Web', sans-serif;
+}
+
+.header {
+    position: relative;
+    top: 10px;
+    width: calc(100% / 6) !important;
+    text-align: left;
+}
+
+.c-label {
+    width: calc(100% / 6) !important;
+    position: relative;
+    top: 13px;
+    text-align: left;
+}
+
+.c-label-sp {
+    position: relative;
+    top: 13px;
+    width: 20px;
+}
+
+.content {
+    position: relative;
+    width: 90%;
+    height: 50px;
+    background-color: rgba(42, 42, 42, .1);
+    border-radius: 0 10px 0 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-around;
+    transition: background-color .1s;
+}
+
+#cus-records div:hover ,#pro-records div:hover{
+    background-color: rgba(42, 42, 42, .14);
+}
+
+.space-1 {
+    position: relative;
+    height: 15vh;
+}
+
+/*-----*/
+
+/*cart*/
+#btnAddToCart {
+    width: 100%;
+}
+
+#c-proDetails {
+    margin-top: 10px;
+}
+
+/*end of the cart*/
+
+
