@@ -45,9 +45,12 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public ItemDTO search(String id) throws SQLException, ClassNotFoundException {
-        return null;
+    public ItemDTO search(String id,Connection connection) throws SQLException, ClassNotFoundException {
+        ResultSet rst = CrudUtil.executeQuery("SELECT * FROM `item` WHERE ItemCode=?", connection, id);
+        rst.next();
+        return new ItemDTO(rst.getString(1),rst.getString(2),rst.getInt(3),rst.getDouble(4));
     }
+
 
     @Override
     public ArrayList<ItemDTO> getAll(Connection connection) throws SQLException, ClassNotFoundException {

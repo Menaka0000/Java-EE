@@ -3,6 +3,8 @@ package servlets;
 import bo.BoFactory;
 import bo.custom.CustomerBo;
 import dto.CustomerDTO;
+import dto.ItemDTO;
+
 import javax.annotation.Resource;
 import javax.json.*;
 import javax.servlet.annotation.WebServlet;
@@ -27,29 +29,81 @@ public class CustomerServlet extends HttpServlet {
 
         JsonObjectBuilder ob1 = Json.createObjectBuilder();
         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-        try {
-            final Connection connection = ds.getConnection();
-            List<CustomerDTO> allCustomers = customerBO.getAllCustomers(connection);
-            connection.close();
-            for (CustomerDTO c : allCustomers) {
-                JsonObjectBuilder ob2 = Json.createObjectBuilder();
-                ob2.add("id", c.getId());
-                ob2.add("name", c.getName());
-                ob2.add("address", c.getAddress());
-                ob2.add("contact", c.getContact());
-                arrayBuilder.add(ob2.build());
+        String option = req.getParameter("case");
+        switch (option) {
+            case "allCus": {
+                try {
+                    final Connection connection = ds.getConnection();
+                    List<CustomerDTO> allCustomers = customerBO.getAllCustomers(connection);
+                    connection.close();
+                    for (CustomerDTO c : allCustomers) {
+                        JsonObjectBuilder ob2 = Json.createObjectBuilder();
+                        ob2.add("id", c.getId());
+                        ob2.add("name", c.getName());
+                        ob2.add("address", c.getAddress());
+                        ob2.add("contact", c.getContact());
+                        arrayBuilder.add(ob2.build());
+                    }
+                    ob1.add("data", arrayBuilder.build());
+                    ob1.add("message", "success");
+                    ob1.add("status", 200);
+                    resp.setContentType("application/json");
+                    PrintWriter writer = resp.getWriter();
+                    writer.print(ob1.build());
+                } catch (ClassNotFoundException | SQLException e) {
+                    e.printStackTrace();
+                }
+                break;
             }
-            ob1.add("data", arrayBuilder.build());
-            ob1.add("message", "success");
-            ob1.add("status", 200);
-            resp.setContentType("application/json");
-            PrintWriter writer = resp.getWriter();
-            writer.print(ob1.build());
-            System.out.println("hello happy people");
+            case "allID": {
+                try {
+                    final Connection connection = ds.getConnection();
+                    List<CustomerDTO> allCustomers = customerBO.getAllCustomers(connection);
+                    connection.close();
+                    for (CustomerDTO c : allCustomers) {
+                        JsonObjectBuilder ob2 = Json.createObjectBuilder();
+                        ob2.add("id", c.getId());
+                        arrayBuilder.add(ob2.build());
+                    }
+                    ob1.add("data", arrayBuilder.build());
+                    ob1.add("message", "success");
+                    ob1.add("status", 200);
+                    resp.setContentType("application/json");
+                    PrintWriter writer = resp.getWriter();
+                    writer.print(ob1.build());
 
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+                } catch (ClassNotFoundException | SQLException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+            case "getCustomer": {
+                try {
+                    final Connection connection = ds.getConnection();
+                    CustomerDTO customer = customerBO.searchForCustomer(req.getParameter("id"), connection);
+                    connection.close();
+
+                    JsonObjectBuilder ob2 = Json.createObjectBuilder();
+                    ob2.add("id", customer.getId());
+                    ob2.add("name", customer.getName());
+                    ob2.add("address", customer.getAddress());
+                    ob2.add("contact", customer.getContact());
+
+                    ob1.add("data", ob2.build());
+                    ob1.add("message", "success");
+                    ob1.add("status", 200);
+                    resp.setContentType("application/json");
+                    PrintWriter writer = resp.getWriter();
+                    writer.print(ob1.build());
+
+                } catch (ClassNotFoundException | SQLException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
         }
+
+
     }
 
     @Override
@@ -104,10 +158,10 @@ public class CustomerServlet extends HttpServlet {
         JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
         try {
             final Connection connection = ds.getConnection();
-            if (customerBO.deleteCustomer( req.getParameter("cusId"),connection)){
+            if (customerBO.deleteCustomer(req.getParameter("cusId"), connection)) {
                 objectBuilder.add("message", "Customer has been deleted");
                 objectBuilder.add("status", 200);
-            }else {
+            } else {
                 objectBuilder.add("message", "Customer hasn't been deleted");
                 objectBuilder.add("status", 500);
             }

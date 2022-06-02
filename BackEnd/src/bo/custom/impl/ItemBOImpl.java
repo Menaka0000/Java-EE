@@ -31,4 +31,9 @@ public class ItemBOImpl implements ItemBO {
         return itemDAO.delete(id,connection);
     }
 
+    @Override
+    public ItemDTO searchForProduct(String id, Connection connection) throws SQLException, ClassNotFoundException {
+        return itemDAO.search(id,connection);
+    }
+
 }

@@ -199,7 +199,33 @@ body {
 #c-proDetails {
     margin-top: 10px;
 }
-
+.cart-l1 label{
+    display: block;
+    font-size: 1.5rem;
+}
 /*end of the cart*/
-
+/*bottom section*/
+#bo-sec{
+    display: none;
+    align-items: center;
+    position: absolute;
+    right: 5%;
+    /*top: 200px;*/
+    margin: auto;
+    bottom: -120px;
+}
+.tot{
+    font-size: 1.5rem;
+    margin-top: 5px;
+    position: relative;
+    bottom: 0;
+    right: 0;
+}
+#per{
+    position: absolute;
+    right: 7px;
+    top: 4px;
+    opacity: .5;
+}
+/**/
 

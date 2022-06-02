@@ -207,39 +207,37 @@
         </div>
         <section class="row">
             <div class="col-2">
-                <div class="btn-group">
-                    <button aria-expanded="false" aria-haspopup="true" class="btn btn-secondary btn-sm dropdown-toggle"
-                            data-toggle="dropdown" type="button">
-                        Select Customer
-                    </button>
-                    <div class="dropdown-menu">
-                        ...
-                    </div>
+                <div class="btn-group" style="width: 50%">
+                    <select aria-expanded="false" aria-haspopup="true" class="btn btn-secondary btn-sm dropdown-toggle"
+                            data-toggle="dropdown"
+                            id="dropdown1"
+                            onchange="cusIdListener()">
+
+                    </select>
                 </div>
             </div>
             <div class="col-2">Customer ID :
-                <label>C001</label>
+                <label id="cus-id">--</label>
             </div>
             <div class="col-3">Customer Name :
-                <label>Menaka</label>
+                <label id="cus-name">--</label>
             </div>
         </section>
         <section class="row" id="c-proDetails">
             <div class="col-2">
-                <div class="btn-group">
-                    <button aria-expanded="false" aria-haspopup="true" class="btn btn-secondary btn-sm dropdown-toggle"
-                            data-toggle="dropdown" type="button">
-                        Select product
-                    </button>
-                    <div class="dropdown-menu">
-                        ...
-                    </div>
+                <div class="btn-group" style="width: 50%">
+                    <select aria-expanded="false" aria-haspopup="true" class="btn btn-secondary btn-sm dropdown-toggle"
+                            data-toggle="dropdown"
+                            id="dropdown2"
+                            onchange="proIdListener()">
+
+                    </select>
                 </div>
             </div>
-            <div class="col-2">Product</div>
-            <div class="col-2">Price</div>
-            <div class="col-2">Available Qty</div>
-            <div class="col-2">Cost for Item</div>
+            <div class="col-2 cart-l1">Product :<label id="l-pro">--</label></div>
+            <div class="col-2 cart-l1">Price :<label id="l-pri">--</label></div>
+            <div class="col-2 cart-l1">Available Qty :<label id="l-qty">--</label></div>
+            <div class="col-2 cart-l1">Cost for Item :<label id="l-cost">--</label></div>
             <div class="col-2">
                 <div class="mb-3">
                     <input class="form-control" id="qtyForSale" name="qtyForSale" placeholder="Enter your Qty"
@@ -267,13 +265,24 @@
         <div class="header-container">
             <label class="c-label-sp"></label>
             <label class="header">ID</label>
-            <label class="header">Name</label>
-            <label class="header">Address</label>
-            <label class="header">Salary</label>
+            <label class="header">Product</label>
+            <label class="header">Qty</label>
+            <label class="header">Cost</label>
         </div>
         <div id="cart-records">
-
+            <section id="bo-sec">
+                <div style="position: relative">
+                    <input class="form-control" id="discount" placeholder="Enter discount"
+                           type="text">
+                    <h4 id="per">%</h4>
+                </div>
+                <div class="tot">Total : Rs <label id="l-total"></label></div>
+                <button class="btn btn-secondary btnRefactor btn-sm" id="btnPlaceOrder" type="button">Purchase
+                </button>
+            </section>
         </div>
+
+
     </section>
 </section>
 <!--end of the cart-->
@@ -296,14 +305,12 @@
     <label>Customer</label>
 </section>
 
-
-</body>
-
 <script crossorigin="anonymous"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="model/c.js"></script>
 <script>
 
     document.getElementById("product-sec").style.display = "none";
@@ -331,6 +338,8 @@
         document.getElementById("customer-sec").style.display = "none";
         document.getElementById("product-sec").style.display = "none";
         document.getElementById("cart-sec").style.display = "block";
+        loadAllProID();
+        loadAllCusID();
     });
 
 
@@ -407,7 +416,7 @@
     function loadCustomers() {
         $("#cus-records").empty();
         $.ajax({
-            url: "http://localhost:8080/BackEnd_Web2_exploded/customer",
+            url: "http://localhost:8080/BackEnd_Web2_exploded/customer?case=allCus",
             method: "GET",
             success: function (resp) {
                 let x = 1;
@@ -469,22 +478,22 @@
 
     function loadAllProducts() {
         $("#pro-records").empty();
-    $.ajax({
-        url:"http://localhost:8080/BackEnd_Web2_exploded/product",
-        method:"GET",
-        success:function (resp){
-            let x = 1;
-            for (const respElement of resp.data) {
-                console.log("writing start");
-                let row = `<div class=\"content\"><label class="\c-label-sp\">${x++}</label><label class=\"c-label\">${respElement.id}</label><label class=\"c-label\">${respElement.name}</label><label class=\"c-label\">${respElement.qty}</label><label class=\"c-label\">${respElement.price}</label></div>`
-                $("#pro-records").append(row);
-                bindClickEventsForProducts();
+        $.ajax({
+            url: "http://localhost:8080/BackEnd_Web2_exploded/product?case=allProducts",
+            method: "GET",
+            success: function (resp) {
+                let x = 1;
+                for (const respElement of resp.data) {
+                    console.log("writing start");
+                    let row = `<div class=\"content\"><label class="\c-label-sp\">${x++}</label><label class=\"c-label\">${respElement.id}</label><label class=\"c-label\">${respElement.name}</label><label class=\"c-label\">${respElement.qty}</label><label class=\"c-label\">${respElement.price}</label></div>`
+                    $("#pro-records").append(row);
+                    bindClickEventsForProducts();
+                }
             }
-        }
-    });
+        });
     }
 
-    $("#btnItemUpdate").click(function (){
+    $("#btnItemUpdate").click(function () {
         let product = {
             id: $("#txtItemId").val(),
             name: $("#txtItemName").val(),
@@ -492,11 +501,11 @@
             price: $("#txtPrice").val()
         }
         $.ajax({
-            url:"http://localhost:8080/BackEnd_Web2_exploded/product",
-            method:"PUT",
-            contentType:"application/json",
-            data:JSON.stringify(product),
-            success:function (resp){
+            url: "http://localhost:8080/BackEnd_Web2_exploded/product",
+            method: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(product),
+            success: function (resp) {
                 if (resp.status == 200) {
                     swal("Successful!", resp.message, "success");
                     loadAllProducts();
@@ -546,6 +555,275 @@
             $("#txtPrice").val(contact);
         });
     }
+
+    function loadAllProID() {
+        $("#dropdown2").empty();
+        $("#dropdown2").append(`<option value="" disabled selected hidden>Select product</option>`);
+        $.ajax({
+            url: "http://localhost:8080/BackEnd_Web2_exploded/product?case=allID",
+            method: "GET",
+            success: function (resp) {
+                for (let id of resp.data) {
+                    let proId = `<option value="${id.id}">${id.id}</option>`;
+                    $("#dropdown2").append(proId);
+                }
+            }
+        });
+    }
+
+    function loadAllCusID() {
+        $("#dropdown1").empty();
+        $("#dropdown1").append(`<option value="" disabled selected hidden>Select Customer</option>`);
+        $.ajax({
+            url: "http://localhost:8080/BackEnd_Web2_exploded/customer?case=allID",
+            method: "GET",
+            success: function (resp) {
+                for (let id of resp.data) {
+                    let proId = `<option value="${id.id}">${id.id}</option>`;
+                    $("#dropdown1").append(proId);
+                }
+            }
+        });
+    }
+
+    function cusIdListener() {
+        let select = document.getElementById("dropdown1");
+        loadCusDetails(select.options[select.selectedIndex].value)
+    }
+
+    function loadCusDetails(id) {
+        $.ajax({
+            url: "http://localhost:8080/BackEnd_Web2_exploded/customer?case=getCustomer&id=" + id,
+            method: "GET",
+            success: function (resp) {
+                $("#cus-id").text(resp.data.id);
+                $("#cus-name").text(resp.data.name);
+            }
+        });
+    }
+
+
+    function proIdListener() {
+        let select = document.getElementById("dropdown2");
+        for (const item of cart) {
+            if (item.getCItemId() === select.options[select.selectedIndex].value) {
+                loadProDetails(select.options[select.selectedIndex].value, 1);
+                return;
+            }
+        }
+        loadProDetails(select.options[select.selectedIndex].value, 0);
+    }
+
+    function loadProDetails(id, index) {
+        if (index === 0) {
+            $.ajax({
+                url: "http://localhost:8080/BackEnd_Web2_exploded/product?case=getProduct&id=" + id,
+                method: "GET",
+                success: function (resp) {
+                    $("#l-pro").text(resp.data.name);
+                    $("#l-pri").text(resp.data.price);
+                    $("#l-qty").text(resp.data.qty);
+                    setCost();
+                }
+            });
+        } else {
+            const item = cartValidate(id);
+            const availableQty = item.getDbQty() - item.getQtyForSale();
+            $("#l-pro").text(item.getCItemName());
+            $("#l-pri").text(item.getCItemPrice());
+            $("#l-qty").text(availableQty);
+            setCost();
+        }
+
+    }
+
+    //cart processing part
+    $('#qtyForSale').on('keyup', function (eventOb) {
+        setCost()
+    });
+
+    function setCost() {
+        let qty = $("#qtyForSale").val();
+        let price = $("#l-pri").text();
+        $("#l-cost").text(qty * price);
+        $("#l-qty").text();
+    }
+
+    let cart = [];
+
+    /*
+        $("#btnAddToCart").click(function () {
+                let cusQty = parseInt($("#txtQty").val());
+                let stock = parseInt($("#l-qty").val());
+                if (cusQty <= stock) {
+                    let select = document.getElementById("dropdown2");
+                    let cartItem = new c(select.options[select.selectedIndex].value, cusQty, $("#l-pri").text(), $("#l-cost").text());
+                    cart.push(cartItem);
+                } else {
+                    swal("Invalid Qty!", "Stock quantity is exceeded.", "warning");
+                }
+
+
+            }
+        );*/
+
+    const ItemQtyRegEx = /^[0-9]{1,9}$/;
+    let x = 0;
+
+    $("#btnAddToCart").click(function () {
+
+        let qtyForSale = parseInt($("#qtyForSale").val());
+        let stock = parseInt($("#l-qty").text());
+        let select = document.getElementById("dropdown2");
+        let updatedStockQty = $("#l-qty").text() - $("#qtyForSale").val();
+        if (ItemQtyRegEx.test(String(qtyForSale))) {
+            if (stock >= qtyForSale) {
+                if (!cartValidate(select.options[select.selectedIndex].value)) {
+                    let cartItem1 = new c(select.options[select.selectedIndex].value, $("#l-pro").text(), $("#qtyForSale").val(), $("#l-qty").text(), $("#l-pri").text(), $("#l-cost").text());
+                    cart.push(cartItem1);
+                    $("#l-qty").text(updatedStockQty);
+                    let row = `<div class=\"content\"><label class="\c-label-sp\">${++x}</label><label class=\"c-label\">${select.options[select.selectedIndex].value}</label><label class=\"c-label\">${$("#l-pro").text()}</label><label class=\"c-label\">${$("#qtyForSale").val()}</label><label class=\"c-label\">${$("#l-cost").text()}</label></div>`
+                    $("#cart-records").append(row);
+                    setTotal();
+                    setBottom();
+                } else {
+                    swal({
+                        title: "Confirmation",
+                        text: "This item is already in the cart, Do you want to add more!",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                        .then((willDelete) => {
+                            if (willDelete) {
+                                let itemForUpdate = cartValidate(select.options[select.selectedIndex].value);
+                                let newQtyForSale = parseInt(itemForUpdate.getQtyForSale()) + parseInt($("#qtyForSale").val());
+                                itemForUpdate.setQtyForSale(newQtyForSale);
+                                let newCost = parseInt(itemForUpdate.getCItemPrice()) * newQtyForSale;
+
+                                itemForUpdate.setCItemCost(newCost);
+                                setTotal();
+
+                                var table = document.getElementById('cart-records');
+                                var rowLength = table.children.length;
+                                for (var i = 0; i < rowLength; i++) {
+                                    var row = table.children[i];
+                                    let rowId = $(row.children[1]).text();
+
+
+                                    let updatedItem = cartValidate(select.options[select.selectedIndex].value);
+                                    updatedItem.setCItemCost(newCost);
+                                    updatedItem.setQtyForSale(newQtyForSale)
+
+                                    if (rowId === updatedItem.getCItemId()) {
+                                        row.children[3].innerText = String(newQtyForSale);
+                                        row.children[4].innerText = String(newCost);
+                                    }
+
+                                }
+                                $("#l-qty").text(updatedStockQty);
+                                swal("cart was Updated!", "");
+                            }
+                        });
+                }
+            } else {
+                swal("Stock quantity is exceeded!", "error");
+            }
+        } else {
+            swal("The format is incorrect!", "error");
+        }
+    });
+
+    function cartValidate(itemID) {
+        for (let i = 0; i < cart.length; i++) {
+            if (cart[i].getCItemId() === itemID) {
+                return cart[i];
+            }
+        }
+        return false;
+    }
+
+    function setTotal() {
+        const total = getTotal();
+        console.log(total);
+        if ($("#discount").val() == "") {
+            $("#l-total").empty();
+            $("#l-total").text(total);
+        } else {
+            setDiscount();
+        }
+    }
+
+    function getTotal() {
+        let total = 0;
+        for (let i = 0; i < cart.length; i++) {
+            let int = parseInt(cart[i].getCItemCost());
+            total += int;
+        }
+        return total;
+    }
+
+    $('#discount').on('keyup', function (eventOb) {
+        setDiscount();
+    });
+
+    function setDiscount() {
+        let dis;
+        if ($("#discount").val() == "") {
+            dis = 0;
+        } else {
+            dis = parseInt($("#discount").val());
+        }
+        let tot = parseInt($("#l-total").text());
+        $("#l-total").text(getTotal() - (getTotal() * (dis / 100)));
+        console.log(tot * (dis / 100));
+    }
+
+    function setBottom() {
+        if (cart.length == 0) {
+            console.log("none")
+            $("#bo-sec").css("display", "none");
+        } else {
+            console.log("dis")
+            $("#bo-sec").css("display", "block");
+        }
+    }
+
+    $("#btnPlaceOrder").click(function () {
+        let select = document.getElementById("dropdown1");
+        let dis = getTotal() - parseInt($("#l-total").text());
+        let items = [];
+
+        for (var itemFromCart of cart) {
+            let item = {
+                id: itemFromCart.getCItemId(),
+                qyt: itemFromCart.getQtyForSale(),
+                price:itemFromCart.getCItemPrice(),
+                cost: itemFromCart.getCItemCost()
+            }
+            items.push(item);
+        }
+
+        let order = {
+            cusId: select.options[select.selectedIndex].value,
+            items: items,
+            totalCost: getTotal(),
+            discount:dis
+        }
+
+        $.ajax({
+            url: "http://localhost:8080/BackEnd_Web2_exploded/order",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(order),
+            success: function () {
+
+            }
+        });
+    });
     /*End of the product section*/
 </script>
+</body>
+
+
 </html>

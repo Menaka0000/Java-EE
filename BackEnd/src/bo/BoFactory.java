@@ -2,6 +2,7 @@ package bo;
 
 import bo.custom.impl.CustomerBOImpl;
 import bo.custom.impl.ItemBOImpl;
+import bo.custom.impl.OrderBOImpl;
 
 public class BoFactory {
     private static BoFactory boFactory;
@@ -21,9 +22,9 @@ public class BoFactory {
                 return new ItemBOImpl();
             case CUSTOMER:
                 return new CustomerBOImpl();
-       /*     case PURCHASE_ORDER:
-                return new PurchaseOrderBOImpl();
-            case ITEM_DELETE:
+            case ORDER:
+                return new OrderBOImpl();
+           /* case ITEM_DELETE:
                 return new ItemDeleteBOImpl();
             case ORDER_DETAIL:
                 return new OrderDetailBOImpl();
@@ -37,7 +38,7 @@ public class BoFactory {
     }
 
     public enum BoTypes {
-        CUSTOMER, ITEM, PURCHASE_ORDER,ITEM_DELETE,ORDER_DETAIL,UPDATE_ORDER,UPDATE_ITEM
+        CUSTOMER, ITEM, ORDER,ITEM_DELETE,ORDER_DETAIL,UPDATE_ORDER,UPDATE_ITEM
     }
 
 }

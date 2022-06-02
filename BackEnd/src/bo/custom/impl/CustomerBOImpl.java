@@ -17,8 +17,8 @@ public class CustomerBOImpl implements CustomerBo {
     }
 
     @Override
-    public CustomerDTO searchForCustomer(String customerId) throws SQLException, ClassNotFoundException {
-        return null;
+    public CustomerDTO searchForCustomer(String customerId,Connection connection) throws SQLException, ClassNotFoundException {
+        return customerDAO.search(customerId,connection);
     }
 
     @Override

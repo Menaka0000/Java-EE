@@ -10,7 +10,7 @@ import java.util.List;
 public interface CustomerBo extends SuperBO {
     List<String> getCustomerIds() throws SQLException, ClassNotFoundException;
 
-    CustomerDTO searchForCustomer(String customerId) throws SQLException, ClassNotFoundException;
+    CustomerDTO searchForCustomer(String customerId,Connection connection) throws SQLException, ClassNotFoundException;
 
 //    ResultSet searchByName(String text) throws SQLException, ClassNotFoundException;
 
